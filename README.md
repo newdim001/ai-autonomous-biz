@@ -1,14 +1,27 @@
 # 🤖 AI-POWERED AUTONOMOUS BUSINESS v2.0
 
-Fully autonomous business with real AI/ML capabilities.
+Fully autonomous business with **DeepSeek AI** and self-learning capabilities.
+
+## 🧠 AI Provider: DeepSeek
+
+DeepSeek is a powerful open-source AI model - cheaper and often faster than GPT-4!
+
+| Feature | DeepSeek | OpenAI (fallback) |
+|---------|----------|-------------------|
+| Content Generation | ✅ | ✅ |
+| Lead Analysis | ✅ | ✅ |
+| Code Generation | ✅ | ✅ |
+| Reasoning | ✅ | ✅ |
+| Cost | ~$0.14/1M tokens | ~$30/1M tokens |
 
 ## What's Included
 
-### 🧠 AI Core (OpenAI Integration)
+### 🧠 AI Core (DeepSeek)
 - **Content Generation**: AI writes blog posts, emails, social content
 - **Lead Analysis**: AI scores and qualifies leads
 - **Report Generation**: AI creates comprehensive SEO reports
 - **Response Generation**: AI replies to customer inquiries
+- **Code Generation**: AI can write code too!
 
 ### 📊 Self-Learning Engine
 - Tracks all metrics: opens, clicks, conversions, revenue
@@ -34,8 +47,13 @@ Fully autonomous business with real AI/ML capabilities.
 # Install
 npm install openai stripe resend
 
-# Set environment
-export OPENAI_API_KEY=sk_...
+# Set environment (DeepSeek)
+export DEEPSEEK_API_KEY=sk-...
+
+# Or fallback to OpenAI
+export OPENAI_API_KEY=sk-...
+
+# Set payment/email
 export STRIPE_SECRET_KEY=sk_live_...
 export RESEND_API_KEY=re_...
 
@@ -47,10 +65,20 @@ node index.js
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| OPENAI_API_KEY | Yes* | For AI features (optional - works without) |
+| DEEPSEEK_API_KEY | Yes* | DeepSeek API key (get from deepseek.com) |
+| OPENAI_API_KEY | Yes* | Fallback if no DeepSeek key |
 | STRIPE_SECRET_KEY | Yes | Payment processing |
 | RESEND_API_KEY | Yes | Email sending |
 | STRIPE_WEBHOOK_SECRET | Yes | Payment webhooks |
+
+*At least one AI provider required
+
+## Get DeepSeek API Key
+
+1. Go to https://platform.deepseek.com
+2. Sign up / Login
+3. Create API key
+4. Start using!
 
 ## Features
 
@@ -78,7 +106,7 @@ node index.js
 ai-biz/
 ├── index.js              # Main entry
 ├── ml/
-│   ├── ai-core.js       # OpenAI integration
+│   ├── ai-core.js       # DeepSeek/OpenAI integration
 │   └── learning-engine.js # Self-learning
 ├── predictive/
 │   └── index.js         # Predictions
@@ -87,12 +115,6 @@ ai-biz/
 └── data/                # Learning data
 ```
 
-## API Endpoints
-
-- `POST /api/webhook` - Stripe payments
-- `POST /api/outreach` - Trigger outreach
-- `GET /api/dashboard` - Get analytics
-
 ---
 
-Built with 🤖 for fully autonomous AI-powered revenue
+Built with 🧠 DeepSeek for fully autonomous AI-powered revenue

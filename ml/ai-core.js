@@ -1,6 +1,6 @@
 /**
- * AI CORE - OpenAI Integration
- * Handles all AI operations: content, analysis, predictions
+ * AI CORE - DeepSeek Integration
+ * Uses DeepSeek API (OpenAI-compatible)
  */
 
 const OpenAI = require('openai');
@@ -8,17 +8,38 @@ const OpenAI = require('openai');
 class AICore {
   constructor() {
     this.openai = null;
-    this.model = 'gpt-4';
+    this.model = 'deepseek-chat'; // DeepSeek's chat model
+    this.provider = 'deepseek';
   }
   
   init() {
-    if (process.env.OPENAI_API_KEY) {
+    if (process.env.DEEPSEEK_API_KEY) {
+      // DeepSeek uses OpenAI-compatible API
+      this.openai = new OpenAI({
+        apiKey: process.env.DEEPSEEK_API_KEY,
+        baseURL: 'https://api.deepseek.com/v1' // DeepSeek's API endpoint
+      });
+      this.model = 'deepseek-chat';
+      console.log('🧠 AI Core initialized with DeepSeek');
+    } else if (process.env.OPENAI_API_KEY) {
+      // Fallback to OpenAI
       this.openai = new OpenAI({
         apiKey: process.env.OPENAI_API_KEY
       });
+      this.model = 'gpt-4';
+      console.log('🧠 AI Core initialized with OpenAI (fallback)');
     }
   }
   
+  // Check if AI is available
+  isAvailable() {
+    return !!this.openai;
+  }
+  
+  getProvider() {
+    return this.provider;
+  }
+
   // Generate personalized outreach emails
   async generateOutreach_email(lead, businessType) {
     if (!this.openai) return this.getTemplate_email(lead, businessType);
@@ -29,7 +50,7 @@ class AICore {
     
     Write a short, personalized email that:
     - Has a compelling subject line
-    - Is不超过100 words
+    - Is under 100 words
     - Focuses on value for their business
     - Ends with a clear call to action
     
@@ -45,7 +66,7 @@ class AICore {
       
       return JSON.parse(response.choices[0].message.content);
     } catch (e) {
-      console.log('AI generation failed, using template:', e.message);
+      console.log('DeepSeek generation failed, using template:', e.message);
       return this.getTemplate_email(lead, businessType);
     }
   }
@@ -169,6 +190,54 @@ class AICore {
       return response.choices[0].message.content;
     } catch (e) {
       return this.getTemplateResponse(inquiry);
+    }
+  }
+  
+  // Advanced: Code generation (DeepSeek excels at this)
+  async generateCode(specification) {
+    if (!this.openai) return null;
+    
+    const prompt = `Generate code based on this specification:
+    
+    ${specification}
+    
+    Provide clean, working code with comments.`;
+    
+    try {
+      const response = await this.openai.chat.completions.create({
+        model: this.model,
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.3
+      });
+      
+      return response.choices[0].message.content;
+    } catch (e) {
+      return null;
+    }
+  }
+  
+  // Analysis and reasoning
+  async analyze(data, question) {
+    if (!this.openai) return null;
+    
+    const prompt = `Analyze this data and answer the question:
+    
+    Data: ${JSON.stringify(data)}
+    
+    Question: ${question}
+    
+    Provide a detailed, insightful answer.`;
+    
+    try {
+      const response = await this.openai.chat.completions.create({
+        model: this.model,
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.5
+      });
+      
+      return response.choices[0].message.content;
+    } catch (e) {
+      return null;
     }
   }
   
