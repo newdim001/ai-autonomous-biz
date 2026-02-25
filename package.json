@@ -1,0 +1,15 @@
+{
+  "name": "ai-autonomous-business",
+  "version": "2.0.0",
+  "description": "AI-Powered Autonomous Business with OpenAI, ML, and Self-Learning",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "train": "node training/run.js"
+  },
+  "dependencies": {
+    "openai": "^4.0.0",
+    "stripe": "^14.0.0",
+    "resend": "^3.0.0"
+  }
+}
